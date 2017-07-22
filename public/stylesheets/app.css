@@ -1,0 +1,74 @@
+body {
+  color: #57534A;
+  background-color: #F1F1E1;
+}
+
+.btn-primary, .btn-primary:enabled {
+  color: #FEFEFE;
+  text-shadow: 0 -1px 0px #568356;
+  background-color: #80CF80;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border: none;
+  transition: all 120ms ease-out
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  color: #FEFEFE;
+  background-color: #9ADFAC;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border: none;
+  transition: all 120ms ease-out
+}
+
+.item-box:hover {
+  cursor: pointer;
+}
+
+.btn-group .btn {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.selected-element {
+  background-color: #A2EFA2;
+}
+
+hr .invisible {
+  background-color: none;
+  color: none;
+}
+
+.ui-state-highlight {
+  height: 70px;
+  background-color: rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.dragged-element {
+  box-shadow: 0 5px 10px #57534A;
+  -moz-transform: scale(1.025);
+  -webkit-transform: scale(1.025);
+  transform: scale(1.025);
+  -moz-transition: box-shadow transform 260ms ease-out;
+  -webkit-transition: box-shadow transform 260ms ease-out;
+  transition: box-shadow transform 260ms ease-out;
+}
+
+.jumbotron-custom {
+  border-radius: 6px;
+  background-color: #E1E1D1;
+  padding: 30px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.danger-panel {
+  box-shadow: 0 0 10px rgba(210, 40, 20, 0.5);
+  border: 3px solid rgba(210, 40, 20 ,0.5);
+}

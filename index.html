@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Backbone Test</title>
+    <link rel="stylesheet" href="public/stylesheets/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="public/stylesheets/app.css" type="text/css" />
+    <meta charset="utf-8" />
+
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="row">
+        <div class="col col-md-12">
+          <h2>Test</h2>
+          <div class="form-group">
+
+            <span id="remove-fields-anchor"></span>
+
+
+	    <div class="row">
+	      <div class="col col-md-8">
+		<span>Sort by&nbsp;</span>
+		<span id="sort-buttons-anchor"></span>
+
+		<span>&nbsp;or&nbsp;</span>
+		<button type="button" id="items-reverse-button" class="btn btn-primary btn-sm">reverse</button>
+	      </div>
+
+	      <div class="col col-md-4 pull-right text-right">
+		<div class="row">
+		  <button type="button" id="remove-selected-elements-button" class="btn btn-primary btn-sm">Remove selected</button>
+		  <button type="button" id="keep-only-selected-elements-button" class="btn btn-primary btn-sm">Keep only selected</button>
+		</div>
+
+		<div class="row">
+		  <button type="button" id="select-all-elements-button" class="btn btn-link btn-sm">Select all</button>
+		  <span>&nbsp;/&nbsp;</span>
+		  <button type="button" id="unselect-all-elements-button" class="btn btn-link btn-sm">Unselect all</button>
+		  <span>&nbsp;or&nbsp;</span>
+		  <button type="button" id="invert-selection-for-all-elements-button" class="btn btn-link btn-sm">Invert selection</button>
+		</div>
+              </div>
+	    </div>
+
+            <span id="add-fields-anchor"></span>
+
+            <div class="row">
+	      <div class="text-center">
+		<a href="#" id="new-item-button" class="text-muted">Create new</a>
+	      </div>
+	    </div>
+
+          </div>
+          <div id="items-info-box" class="row">
+
+          </div>
+          <div class="row">
+            <span id="main-house-info"></span>
+          </div>
+          <div class="row">
+            <span id="main-house-previous-info"></span>
+          </div>
+          <div class="row">
+            <span id="main-house-has-changed-info"></span>
+          </div>
+          <div class="row">
+            <span id="main-house-changed-attributes-info"></span>
+          </div>
+          <div class="row">
+            <span id="main-house-previous-value-info"></span>
+          </div>
+          <div class="row">
+            <span id="main-house-previous-attributes-info"></span>
+          </div>
+        </div>
+
+        <div id="test-city-items" class="row">
+
+        </div>
+
+      </div>
+    </div>
+
+    <script type="text/javascript" src="public/javascripts/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="public/javascripts/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="public/javascripts/underscore-min.js"></script>
+    <script type="text/javascript" src="public/javascripts/backbone-min.js"></script>
+
+
+    <script type="text/javascript" src="public/javascripts/app.js"></script>
+
+    <script type="text/template" id="item-box-template">
+      <div class="item-box panel panel-default panel-body">
+
+	<div class="non-edit-view">
+	  <ul class="list-inline">
+	    <% _.each(model, function(value, key) { %>
+	    <li><strong><%- key %>: </strong><%- value %></li>
+	    <% }); %>
+	    <li><button type="button" class="btn btn-link btn-xs item-edit-button">Edit</button></li>
+	  </ul>
+	  <button type="button" class="btn btn-primary info-button pull-right">Info</button>
+	</div>
+
+        <div class="edit-view hidden">
+
+          <% _.each(model, function(value, key) { %>
+          <% if (!_.contains(ignoredFields, key)) { %>
+          <div class="row">
+            <div class="col col-md-3">
+              <strong><%- key %></strong>
+            </div>
+            <div class="col col-md-9">
+              <%= self.elms.input(key, value) %>
+            </div>
+          </div>
+          <% } %>
+          <% }); %>
+
+          <div class="row item-button-container">
+            <hr class="invisible"/>
+            <div class="col col-md-4 col-md-offset-2">
+              <button type="button" class="col col-md-3 col-md-offset-4 btn btn-link item-cancel-button">Cancel</button>
+            </div>
+            <div class="col col-md-4">
+              <button type="button" class="col col-md-3 col-md-offset-4 btn btn-secondary item-save-button">Save</button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </script>
+
+    <script type="text/template" id="sort-buttons-template">
+      <% _.each(fields, function (field) { %>
+      <button type="button" id="items-sort-by-<%- field %>-button" class="btn btn-primary sort-by-field-button" data-field-name="<%- field %>"><%- field %></button>
+      <% }); %>
+      <button type="button" id="remove-fields-button" class="btn btn-secondary">-</button>
+      <button type="button" id="add-new-field-button" class="btn btn-secondary">+</button>
+    </script>
+
+    <script type="text/template" id="add-fields-template">
+      <% _.each(model, function(field, n) { %>
+      <div class="row form-group new-field-box">
+        <div class="col col-md-4 col-md-offset-3">
+          <input type="text" class="form-control new-field-name" value="<%- field.name %>" />
+        </div>
+        <div class="col col-md-2">
+          <select class="form-control new-field-type">
+            <option <%- (field.type == 'string' ? 'selected': '') %> value="string">Text</option>
+            <option <%- (field.type == 'number' ? 'selected': '') %>  value="number">Number</option>
+            <option <%- (field.type == 'boolean' ? 'selected': '') %> value="boolean">Checkbox</option>
+          </select>
+        </div>
+        <div class="col col-md-1">
+          <button type="button" data-index="<%- n %>" class="btn btn-danger btn-sm add-field-remove-button"><strong>&times;</strong></button>
+        </div>
+
+      </div>
+      <% }); %>
+      <div class="row">
+        <div class="col col-md-1 col-md-offset-9">
+          <button type="button" class="btn btn-success btn-sm" id="add-field-add-button"><strong>+</strong></button>
+        </div>
+      </div>
+
+      <hr class="invisible"/>
+      <div class="text-center">
+        <button type="button" id="add-field-cancel-button" class="btn btn-link">Cancel</button>
+        <button type="button" id="add-field-create-button" class="btn btn-primary">Create</button>
+      </div>
+    </script>
+
+    <script type="text/template" id="remove-fields-template">
+      <ul class="list-inline text-center">
+	<% _.each(fields, function(field) { %>
+	<li><label class="btn btn-default btn-sm cursor-pointer">
+          <input data-field-name="<%- field %>" type="checkbox" value="" />
+          <%- field %>
+	</label></li>
+	<% }); %>
+      </ul>
+
+      <hr class="invisible"/>
+      <div class="text-right">
+        <button type="button" id="cancel-remove-fields-button" class="btn btn-link">Cancel</button>
+        <button type="button" id="do-remove-fields-button" class="btn btn-danger">Remove</button>
+      </div>
+    </script>
+
+  </body>
+</html>
